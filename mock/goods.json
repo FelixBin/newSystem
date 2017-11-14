@@ -1,0 +1,30 @@
+{
+"status":"0",
+  "msg":"",
+  "result":[
+    {
+    "productId":"100001",
+    "productName":"小米6",
+    "productPrice":1000,
+    "productImg":"1.jpg"
+  },
+    {
+      "productId":"100001",
+      "productName":"OPPO",
+      "productPrice":4500,
+      "productImg":"2.jpg"
+    },
+    {
+      "productId":"100001",
+      "productName":"VIVO",
+      "productPrice":3500,
+      "productImg":"3.jpg"
+    },
+    {
+      "productId":"100001",
+      "productName":"小米7",
+      "productPrice":4000,
+      "productImg":"4.jpg"
+    }
+  ]
+}
