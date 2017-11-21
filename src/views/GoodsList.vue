@@ -23,7 +23,9 @@
                             <dt>Price:</dt>
                             <dd><a href="javascript:void(0)" @click="setPriceFilter('all')">All</a></dd>
                             <dd v-for="(item,index) in priceFilter">
-                                <a href="javascript:void(0)" @click="setPriceFilter(index)" v-bind:class="{'cur':priceChecked==index}">{{item.startPrice}} - {{item.endPrice}}</a>
+                                <a href="javascript:void(0)" @click="setPriceFilter(index)"
+                                   v-bind:class="{'cur':priceChecked==index}">{{item.startPrice}} -
+                                    {{item.endPrice}}</a>
                             </dd>
                         </dl>
                     </div>
@@ -40,14 +42,14 @@
                                         <div class="name">{{item.producName}}</div>
                                         <div class="price">{{item.salePrice}}</div>
                                         <div class="btn-area">
-                                            <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                                            <a href="javascript:;" class="btn btn--m" @click="addCart(item.productId)">加入购物车</a>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                             <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy"
                                  infinite-scroll-distance="20">
-                               <img src="./../assets/loading-spinning-bubbles.svg" v-if="loading">
+                                <img src="./../assets/loading-spinning-bubbles.svg" v-if="loading">
                             </div>
                         </div>
                     </div>
@@ -62,6 +64,7 @@
     import '@/assets/css/base.css'
     import '@/assets/css/product.css'
     import  axios from 'axios'
+    import qs from 'qs';
     import NavHeader from  '@/components/NavHeader.vue'
     import NavFooter from  '@/components/NavFooter.vue'
     import NavBread from  '@/components/NavBread.vue'
@@ -74,26 +77,26 @@
                 page: 1,
                 pageSize: 8,
                 busy: true,
-                priceChecked:'all',
-                priceFilter:[
+                priceChecked: 'all',
+                priceFilter: [
                     {
-                        startPrice:'0.00',
-                        endPrice:'100.00'
+                        startPrice: '0.00',
+                        endPrice: '100.00'
                     },
                     {
-                        startPrice:'100.00',
-                        endPrice:'500.00'
+                        startPrice: '100.00',
+                        endPrice: '500.00'
                     },
                     {
-                        startPrice:'500.00',
-                        endPrice:'1000.00'
+                        startPrice: '500.00',
+                        endPrice: '1000.00'
                     },
                     {
-                        startPrice:'1000.00',
-                        endPrice:'5000.00'
+                        startPrice: '1000.00',
+                        endPrice: '5000.00'
                     }
                 ],
-                loading:false
+                loading: false
             }
         },
         components: {
@@ -110,26 +113,26 @@
                     page: this.page,
                     pageSize: this.pageSize,
                     sortPrice: this.sortFlag ? 1 : -1,
-                    priceLevel:this.priceChecked
+                    priceLevel: this.priceChecked
                 };
-                this.loading=true;
+                this.loading = true;
                 axios.get("http://localhost:27018/goods", {
                     params: param
                 }).then((response) => {
-                    this.loading=false;
+                    this.loading = false;
                     let res = response.data;
                     if (res.status == "0") {
                         if (flag) {
                             this.goodsList = this.goodsList.concat(res.result.list);
 
-                            if(res.result.count == 0) {
+                            if (res.result.count == 0) {
                                 this.busy = true;
-                            }else {
-                                this.busy=false;
+                            } else {
+                                this.busy = false;
                             }
                         } else {
                             this.goodsList = res.result.list;
-                            this.busy=false;
+                            this.busy = false;
                         }
                     } else {
                         this.goodsList = [];
@@ -152,6 +155,17 @@
                     this.page++;
                     this.getGoodList(true)
                 }, 500);
+            },
+            addCart(productId){
+                console.log("productId的值"+productId)
+                axios.post("http://localhost:27018/goods/addCart",qs.stringify({productId:productId})).then(function (res) {
+                    console.log("最后的值："+res)
+                    if (res.status == 0) {
+                        alert("成功")
+                    } else {
+                        alert("失败")
+                    }
+                })
             }
         }
     }

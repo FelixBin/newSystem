@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Goods = require('../models/goods');
+
 //连接mongodb数据库
 mongoose.connect('mongodb://localhost:27018/newSystem', {useMongoClient: true});
 mongoose.connection.on("connected", function () {
@@ -12,7 +13,27 @@ mongoose.connection.on("connected", function () {
      "salePrice":123,
      "productImage":''
      })
-     goos.save();*/
+     goos.save();
+
+    var user = new Users({
+        "userId": "1007",
+        "userName": '',
+        "userPwd": '',
+        "orderList": [],
+        "cartList": [
+            {
+                "productId": "02",
+                "productName": '',
+                "salePrict": '',
+                "productImage": '',
+                "checked": '',
+                "productNum": ''
+            }
+        ],
+        "addressList": []
+    })
+    user.save();
+     */
 });
 mongoose.connection.on("error", function () {
     console.log("失败")
@@ -20,6 +41,8 @@ mongoose.connection.on("error", function () {
 mongoose.connection.on("disconnected", function () {
     console.log("断开")
 });
+
+//查询商品列表
 router.get('/', function (req, res, next) {
     //配置运行跨域
     res.header("Access-Control-Allow-Origin", "*");
@@ -37,7 +60,7 @@ router.get('/', function (req, res, next) {
     let skip = (page - 1) * limit;
     let params = {};
     let priceLevel = req.query.priceLevel;
-    var priceGet = '',priceLtte = '';
+    var priceGet = '', priceLtte = '';
     if (priceLevel != 'all') {
         switch (priceLevel) {
             case '0':
@@ -86,6 +109,68 @@ router.get('/', function (req, res, next) {
         }
     })
 });
+//加入购物车
+router.post("/addCart",function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    var userId = "1007";
+    var productId = req.body.productId;
+    var User = require('../models/user');
+    User.findOne({
+        userId: userId
+    }, function (err,userDoc) {
+        if (err) {
+            console.log("err的值:"+err)
+         return   res.json({
+                status: "1",
+                msg: err.message
+            })
+        } else {
+         res.json({
+                status: 0,
+                msg: ''
+            })
+         if (userDoc) {//用户存在
+                Goods.findOne({
+                    productId: productId
+                }, function (err1, doc) {
+                    console.log("doc是否存在:"+doc)
+                    if (err1) {
+                       return res.json({
+                            status: "1",
+                            msg: err1.message
+                        })
+                    } else {
+                        if (doc) {//商品
+                            console.log("商品是否存在："+doc)
+                            doc.productNum = 1;
+                            doc.checked = 1;
+                            userDoc.cartList.push(doc);
+                            userDoc.save(function (err2, doc2) {
+
+                                if (err2) {
+                                 return   res.json({
+                                        status: "1",
+                                        msg: err2.message
+                                    })
+                                } else {
+                               return     res.json({
+                                        status: "0",
+                                        msg: '',
+                                        result: "suc"
+                                    })
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        }
+   })
+});
+
 module.exports = router;
 
 
