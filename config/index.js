@@ -13,6 +13,10 @@ module.exports = {
     /* '/goods':{
     target:'http://localhost:27018',
       },*/
+        '/users/*':{
+            target:'http://localhost:27018',
+        }
+
     },
 
     // Various Dev Server settings

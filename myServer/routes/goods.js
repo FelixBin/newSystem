@@ -88,7 +88,6 @@ router.get('/', function (req, res, next) {
         }
     }
 
-
     let goodsModel = Goods.find(params).skip(skip).limit(limit);
     //非sql 需使用对象形式
     goodsModel.sort({'salePrice': sort});
@@ -164,9 +163,10 @@ router.post("/addCart", function (req, res, next) {
                         } else {
                             if (doc) {//商品
                                 doc.productNum = 1;
-                                doc.checked = 1;
-                                console.log("doc有没有checked:"+userDoc);
+                                doc.checked = "1";
+
                                 userDoc.cartList.push(doc);
+                                console.log( typeof userDoc.cartList[16])
                                 userDoc.save(function (err2, doc2) {
                                     if (err2) {
                                         return res.json({
