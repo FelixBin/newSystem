@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Goods = require('../models/goods');
+var User = require('../models/user');
 
 //连接mongodb数据库
 mongoose.connect('mongodb://localhost:27018/newSystem', {useMongoClient: true});
@@ -14,26 +15,25 @@ mongoose.connection.on("connected", function () {
      "productImage":''
      })
      goos.save();
-
-    var user = new Users({
-        "userId": "1007",
-        "userName": '',
-        "userPwd": '',
-        "orderList": [],
-        "cartList": [
-            {
-                "productId": "02",
-                "productName": '',
-                "salePrict": '',
-                "productImage": '',
-                "checked": '',
-                "productNum": ''
-            }
-        ],
-        "addressList": []
-    })
-    user.save();
      */
+    /* var user = new User({
+     "userId": "1007",
+     "userName": '',
+     "userPwd": '',
+     "orderList": [],
+     "cartList": [
+     {
+     "productId":"01",
+     "producName": "huwei",
+     "salePrice":50,
+     "productImage": String,
+     "checked": "1",
+     "productNum": ''
+     }
+     ],
+     "addressList": []
+     })
+     user.save();*/
 });
 mongoose.connection.on("error", function () {
     console.log("失败")
@@ -110,65 +110,84 @@ router.get('/', function (req, res, next) {
     })
 });
 //加入购物车
-router.post("/addCart",function (req, res, next) {
+router.post("/addCart", function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     var userId = "1007";
     var productId = req.body.productId;
-    var User = require('../models/user');
+
     User.findOne({
         userId: userId
-    }, function (err,userDoc) {
+    }, function (err, userDoc) {
+        /*   console.log(userDoc)*/
         if (err) {
-            console.log("err的值:"+err)
-         return   res.json({
+            return res.json({
                 status: "1",
                 msg: err.message
             })
         } else {
-         res.json({
-                status: 0,
-                msg: ''
-            })
-         if (userDoc) {//用户存在
-                Goods.findOne({
-                    productId: productId
-                }, function (err1, doc) {
-                    console.log("doc是否存在:"+doc)
-                    if (err1) {
-                       return res.json({
-                            status: "1",
-                            msg: err1.message
-                        })
-                    } else {
-                        if (doc) {//商品
-                            console.log("商品是否存在："+doc)
-                            doc.productNum = 1;
-                            doc.checked = 1;
-                            userDoc.cartList.push(doc);
-                            userDoc.save(function (err2, doc2) {
-
-                                if (err2) {
-                                 return   res.json({
-                                        status: "1",
-                                        msg: err2.message
-                                    })
-                                } else {
-                               return     res.json({
-                                        status: "0",
-                                        msg: '',
-                                        result: "suc"
-                                    })
-                                }
+            if (userDoc) {//用户存在
+                let goodsItem = '';
+                userDoc.cartList.forEach(function (item) {
+                    if (item.productId == productId) {
+                        goodsItem = item;
+                        item.productNum++;
+                    }
+                });
+                if (goodsItem) {
+                    userDoc.save(function (err2, doc2) {
+                        if (err2) {
+                            return res.json({
+                                status: "1",
+                                msg: err2.message
+                            })
+                        } else {
+                            return res.json({
+                                status: "0",
+                                msg: '',
+                                result: "suc"
                             })
                         }
-                    }
-                })
+                    })
+                } else {
+                    Goods.findOne({
+                        productId: productId
+                    }, function (err1, doc) {
+                        if (err1) {
+                            return res.json({
+                                status: "1",
+                                msg: err1.message
+                            })
+                        } else {
+                            if (doc) {//商品
+                                doc.productNum = 1;
+                                doc.checked = 1;
+                                console.log("doc有没有checked:"+userDoc);
+                                userDoc.cartList.push(doc);
+                                userDoc.save(function (err2, doc2) {
+                                    if (err2) {
+                                        return res.json({
+                                            status: "1",
+                                            msg: err2.message
+                                        })
+                                    } else {
+                                        return res.json({
+                                            status: "0",
+                                            msg: '',
+                                            result: "suc"
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+
             }
         }
-   })
+    })
 });
 
 module.exports = router;

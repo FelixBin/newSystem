@@ -7,9 +7,10 @@ var userSchema = new mongoose.Schema({
     "orderList": Array,
     "cartList": [
         {
-            "productId": String,
+            "productId":String,
+            "producName": String,
+            "salePrice":Number,
             "productName": String,
-            "salePrice": String,
             "productImage": String,
             "checked": String,
             "productNum": String

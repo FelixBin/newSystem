@@ -157,10 +157,10 @@
                 }, 500);
             },
             addCart(productId){
-                console.log("productId的值"+productId)
-                axios.post("http://localhost:27018/goods/addCart",qs.stringify({productId:productId})).then(function (res) {
-                    console.log("最后的值："+res)
-                    if (res.status == 0) {
+
+                axios.post("http://localhost:27018/goods/addCart",qs.stringify({productId:productId})).then( (res)=> {
+                   console.log(res)
+                    if (res.data.status == 0) {
                         alert("成功")
                     } else {
                         alert("失败")
