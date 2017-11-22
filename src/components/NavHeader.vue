@@ -9,11 +9,11 @@
                 <path class="path4" d="M9.599 25.594c-1.769 0-3.203 1.434-3.203 3.203s1.434 3.203 3.203 3.203c1.769 0 3.203-1.434 3.203-3.203s-1.434-3.203-3.203-3.203zM9.599 30.717c-1.060 0-1.92-0.86-1.92-1.92s0.86-1.92 1.92-1.92c1.060 0 1.92 0.86 1.92 1.92s-0.86 1.92-1.92 1.92z"></path>
             </symbol>
             <div class="navbar">
-                <div class="navbar-left-container">
+                <div class="navbar-left-container"  style="float: left">
                     <a href="/">
                         <img class="navbar-brand-logo" src="/static/logo.png"></a>
                 </div>
-               <div class="navbar-right-container" style="display: flex;">
+               <div class="navbar-right-container" style="width: 50%;float: right;margin-right: -206px">
                      <div class="navbar-menu-container">
                        <!-- <a href="/" class="navbar-link">我的账户</a>-->
                          <span class="navbar-link"></span>
@@ -30,11 +30,42 @@
                      </div>
                  </div>
             </div>
+<div style="clear: both"></div>
+            <div class="md-modal modal-msg md-modal-transition" >
+                <div class="md-modal-inner">
+                    <div class="md-top">
+                        <div class="md-title">Login in</div>
+                        <button class="md-close" @click="loginModalFlag=false">Close</button>
+                    </div>
+                    <div class="md-content">
+                        <div class="confirm-tips">
+                            <div class="error-wrap">
+                                <span class="error error-show" v-show="errorTip">用户名或者密码错误</span>
+                            </div>
+                            <ul>
+                                <li class="regi_form_input">
+                                    <i class="icon IconPeople"></i>
+                                    <input type="text" tabindex="1" name="loginname" v-model="userName" class="regi_login_input regi_login_input_left" placeholder="User Name" data-type="loginname">
+                                </li>
+                                <li class="regi_form_input noMargin">
+                                    <i class="icon IconPwd"></i>
+                                    <input type="password" tabindex="2"  name="password" v-model="userPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" @keyup.enter="login">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="login-wrap">
+                            <a href="javascript:;" class="btn-login" @click="login">登  录</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md-overlay" v-if="false" @click=""></div>
         </header>
     </div>
 </template>
 
 <script>
+    import './../assets/css/login.css'
     export default {
         name: 'temp',
         data () {
@@ -44,3 +75,9 @@
         }
     }
 </script>
+<style scoped>
+.navbar-cart-logo{
+    height: 50px;
+    width: 50px;
+}
+</style>

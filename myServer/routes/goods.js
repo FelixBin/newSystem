@@ -88,6 +88,7 @@ router.get('/', function (req, res, next) {
         }
     }
 
+
     let goodsModel = Goods.find(params).skip(skip).limit(limit);
     //非sql 需使用对象形式
     goodsModel.sort({'salePrice': sort});

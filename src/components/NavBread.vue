@@ -21,3 +21,8 @@
         }
     }
 </script>
+<style scoped>
+.nav-breadcrumb{
+    width: 12%;
+}
+</style>
