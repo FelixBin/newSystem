@@ -24,13 +24,13 @@ router.post('/login', function (req, res, next) {
             })
         } else {
             if (userDoc) {
-                     //cookie
+                //cookie
                 res.cookie("userId", userDoc.userId, {
                     path: '/',
-                    maxAge: 1000 * 60 * 60
+                    maxAge: 1000*60*60
                 });
                 //session
-             /*  req.session["user"] = userDoc;*/
+                /*  req.session["user"] = userDoc;*/
                 res.json({
                     status: "0",
                     msg: '',
@@ -40,6 +40,22 @@ router.post('/login', function (req, res, next) {
                 })
             }
         }
+    })
+});
+//注销
+router.post('/logout', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.cookie('userId', '', {
+        path: "/",
+        maxAge: -1
+    });
+    res.json({
+        status: "0",
+        msg: '',
+        result: ''
     })
 })
 module.exports = router;
