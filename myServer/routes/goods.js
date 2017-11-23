@@ -163,7 +163,6 @@ router.post("/addCart", function (req, res, next) {
                             if (doc) {//商品
                                 doc.productNum = 1;
                                 doc.checked = "1";
-
                                 userDoc.cartList.push(doc);
                                 console.log(typeof userDoc.cartList[16])
                                 userDoc.save(function (err2, doc2) {
