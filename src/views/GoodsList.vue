@@ -116,7 +116,7 @@
                     priceLevel: this.priceChecked
                 };
                 this.loading = true;
-                axios.get("http://localhost:27018/goods", {
+                axios.get("http://localhost:27018/goods/list", {
                     params: param
                 }).then((response) => {
                     this.loading = false;
@@ -157,9 +157,8 @@
                 }, 500);
             },
             addCart(productId){
-
-                axios.post("http://localhost:27018/goods/addCart",qs.stringify({productId:productId})).then( (res)=> {
-                   console.log(res)
+                axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId})).then((res) => {
+                    console.log(res)
                     if (res.data.status == 0) {
                         alert("成功")
                     } else {

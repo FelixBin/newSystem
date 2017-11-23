@@ -43,7 +43,7 @@ mongoose.connection.on("disconnected", function () {
 });
 
 //查询商品列表
-router.get('/', function (req, res, next) {
+router.get('/list', function (req, res, next) {
     //配置运行跨域
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
@@ -117,11 +117,10 @@ router.post("/addCart", function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     var userId = "1007";
     var productId = req.body.productId;
-
+    console.log("productId:" + productId);
     User.findOne({
         userId: userId
     }, function (err, userDoc) {
-        /*   console.log(userDoc)*/
         if (err) {
             return res.json({
                 status: "1",
@@ -166,7 +165,7 @@ router.post("/addCart", function (req, res, next) {
                                 doc.checked = "1";
 
                                 userDoc.cartList.push(doc);
-                                console.log( typeof userDoc.cartList[16])
+                                console.log(typeof userDoc.cartList[16])
                                 userDoc.save(function (err2, doc2) {
                                     if (err2) {
                                         return res.json({
@@ -185,7 +184,6 @@ router.post("/addCart", function (req, res, next) {
                         }
                     })
                 }
-
             }
         }
     })
