@@ -63,7 +63,7 @@
 <script>
     import '@/assets/css/base.css'
     import '@/assets/css/product.css'
-    import  axios from 'axios'
+  /*  import  axios from 'axios'*/
     import qs from 'qs';
     import NavHeader from  '@/components/NavHeader.vue'
     import NavFooter from  '@/components/NavFooter.vue'
@@ -116,9 +116,11 @@
                     priceLevel: this.priceChecked
                 };
                 this.loading = true;
-                axios.get("http://localhost:27018/goods/list", {
+             this.$axios.get("http://localhost:27018/goods/list", {
                     params: param
-                }).then((response) => {
+                },{
+                withCredentials : true
+             }).then((response) => {
                     this.loading = false;
                     let res = response.data;
                     if (res.status == "0") {
@@ -157,7 +159,11 @@
                 }, 500);
             },
             addCart(productId){
-                axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId})).then((res) => {
+              this.$axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId},{
+                  withCredentials : true
+                }),{
+                  withCredentials : true
+                }).then((res) => {
                     console.log(res)
                     if (res.data.status == 0) {
                         alert("成功")

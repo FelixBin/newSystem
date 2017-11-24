@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import vueInfiniteScroll from  'vue-infinite-scroll'
+import axios from 'axios';
+axios.defaults.withCredentials=true;
+Vue.prototype.$axios = axios;
 Vue.config.productionTip = false
 Vue.use(vueInfiniteScroll)
 /* eslint-disable no-new */

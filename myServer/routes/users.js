@@ -5,13 +5,8 @@ var User = require("./../models/user");
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
-
 router.post('/login', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    var param = {
+  var param = {
         userName: req.body.userName,
         userPwd: req.body.userPwd,
     };
@@ -49,12 +44,7 @@ router.post('/login', function (req, res, next) {
 });
 //注销
 router.post('/logout', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.cookie('userId', '', {
-        path: "/",
         maxAge: -1
     });
     res.json({
@@ -63,8 +53,9 @@ router.post('/logout', function (req, res, next) {
         result: ''
     })
 });
+//刷新保持
 router.get('/checkLogin', function (req, res, next) {
-    if (req.cookies.userId) {
+  if (req.cookies.userId) {
         res.json({
             status: "0",
             msg: '',

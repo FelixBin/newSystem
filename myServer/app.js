@@ -11,6 +11,8 @@ var goods = require('./routes/goods');
 var ejs = require('ejs');
 var app = express();
 
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', ejs.__express);
@@ -23,19 +25,31 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//设置跨域访问
+app.all('*', function (req, res, next) {
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Origin", "http://localhost:8081");
+    if (req.method == 'OPTIONS') {
+        /*让options请求快速返回*/
+        res.send(200);
+    }
+    else {
+        next();
+    }
+});
+
 //登录拦截器
 app.use(function (req, res, next) {
     if (req.cookies.userId) {
         next();
     } else {
-        if (req.originalUrl == '/users/login' || req.originalUrl == '/users/logout' || req.path=="/goods/list") {
+        if (req.originalUrl == '/users/login' || req.originalUrl == '/users/logout' || req.path == "/goods/list") {
             next();
         } else {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-            res.header("Access-Control-Allow-Headers", "X-Requested-With");
-            res.header('Access-Control-Allow-Headers', 'Content-Type');
-             res.json({
+            res.json({
                 status: "10001",
                 msg: "当前未登录",
                 result: ''

@@ -22,7 +22,7 @@
                         <!-- <a href="/" class="navbar-link">我的账户</a>-->
                         <span class="navbar-link" v-text="nickName" v-if="nickName"></span>
                         <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
-                        <a href="javascript:void(0)" class="navbar-link" @click="Logout" v-else>Logout</a>
+                        <a href="javascript:void(0)" class="navbar-link" @click="logout" v-else>Logout</a>
                         <div class="navbar-cart-container">
                             <span class="navbar-cart-count"></span>
                             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -75,7 +75,6 @@
 
 <script>
     import './../assets/css/login.css'
-    import axios from 'axios'
     import  qs from 'qs'
     export default {
         name: 'temp',
@@ -93,10 +92,13 @@
         },
         methods: {
             checkLogin(){
-                axios.get("http://localhost:27018/users/checkLogin").then((response) => {
+                this.$axios.get('http://localhost:27018/users/checkLogin',
+                    {
+                        withCredentials: true
+                    }).then((response) => {
                     let res = response.data;
                     if (res.status == "0") {
-                        this.nickName = res.result.userName;
+                        this.nickName = res.result;
                     }
                 })
             },
@@ -105,12 +107,15 @@
                     this.errorTip = true;
                     return false;
                 }
-                axios.post('http://localhost:27018/users/login',
+                this.$axios.post('http://localhost:27018/users/login',
                     qs.stringify({
                             userName: this.userName,
                             userPwd: this.userPwd
                         }
                     ),
+                    {
+                        withCredentials: true
+                    }
                 ).then((response) => {
                     let res = response.data;
                     if (res.status == "0") {
@@ -122,12 +127,13 @@
                     }
                 })
             },
-            Logout(){
-                axios.post("http://localhost:27018/users/logout").then((response) => {
-                    console.log(response)
+            logout(){
+                this.$axios.post("http://localhost:27018/users/logout", {
+                withCredentials : true
+            }).then((response) => {
                     let res = response.data;
                     if (res.status == "0") {
-                        this.nickName = ""
+                        this.nickName = ''
                     }
                 })
             }
