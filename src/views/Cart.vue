@@ -59,38 +59,40 @@
                             </ul>
                         </div>
                         <ul class="cart-item-list">
-                            <li >
+                            <li v-for="item in cartList">
                                 <div class="cart-tab-1">
                                     <div class="cart-item-check">
-                                        <a href="javascipt:;" class="checkbox-btn item-check-btn" >
+                                        <a href="javascipt:;" class="checkbox-btn item-check-btn">
                                             <svg class="icon icon-ok">
                                                 <use xlink:href="#icon-ok"></use>
                                             </svg>
                                         </a>
                                     </div>
                                     <div class="cart-item-pic">
-                                       <!-- <img v-lazy="'/static/'+item.productImage" v-bind:alt="item.productName">-->
+                                        <img v-lazy="item.productImage" v-bind:alt="item.productName">
                                     </div>
                                     <div class="cart-item-title">
-                                     <!--   <div class="item-name">{{item.productName}}</div>-->
+                                        <div class="item-name">{{item.productName}}</div>
                                     </div>
                                 </div>
                                 <div class="cart-tab-2">
-                                   <!-- <div class="item-price">{{item.salePrice|currency('$')}}</div>-->
+                                    <div class="item-price">{{item.salePrice|currency('$')}}</div>
                                 </div>
                                 <div class="cart-tab-3">
                                     <div class="item-quantity">
                                         <div class="select-self select-self-open">
                                             <div class="select-self-area">
-                                                <a class="input-sub" >-</a>
-                                              <!--  <span class="select-ipt">{{item.productNum}}</span>-->
-                                                <a class="input-add" >+</a>
+                                                <a class="input-sub">-</a>
+                                                <span class="select-ipt">{{item.productNum}}</span>
+                                                <a class="input-add">+</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="cart-tab-4">
-                                    <div class="item-price-total"><!--{{(item.productNum*item.salePrice)|currency('$')}}--></div>
+                                    <div class="item-price-total">
+                                        {{(item.productNum*item.salePrice)}}
+                                    </div>
                                 </div>
                                 <div class="cart-tab-5">
                                     <div class="cart-item-opration">
@@ -109,8 +111,8 @@
                     <div class="cart-foot-inner">
                         <div class="cart-foot-l">
                             <div class="item-all-check">
-                                <a href="javascipt:;" >
-                  <span class="checkbox-btn item-check-btn" >
+                                <a href="javascipt:;">
+                  <span class="checkbox-btn item-check-btn">
                       <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                   </span>
                                     <span>Select all</span>
@@ -122,19 +124,18 @@
                                 Item total: <span class="total-price"></span>
                             </div>
                             <div class="btn-wrap">
-                                <a class="btn btn--red"  >Checkout</a>
+                                <a class="btn btn--red">Checkout</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <nav-footer></nav-footer>
     </div>
 </template>
 <style>
-    .input-sub,.input-add{
+    .input-sub, .input-add {
         min-width: 40px;
         height: 100%;
         border: 0;
@@ -145,13 +146,15 @@
         display: inline-block;
         background: #f0f0f0;
     }
-    .item-quantity .select-self-area{
-        background:none;
+
+    .item-quantity .select-self-area {
+        background: none;
         border: 1px solid #f0f0f0;
     }
-    .item-quantity .select-self-area .select-ipt{
+
+    .item-quantity .select-self-area .select-ipt {
         display: inline-block;
-        padding:0 3px;
+        padding: 0 3px;
         width: 30px;
         min-width: 30px;
         text-align: center;
@@ -165,24 +168,27 @@
     import Modal from '@/components/Modal'
     export default{
         data(){
-            return{
-
+            return {
+                cartList: []
             }
         },
-        mounted(){
-
+        mounted() {
+            this.init();
         },
-        computed:{
-
-        },
-        components:{
+        computed: {},
+        components: {
             NavHeader,
             NavFooter,
             NavBread,
             Modal
         },
-        methods:{
-
+        methods: {
+            init(){
+                this.$axios.get("http://localhost:27018/users/cartList",).then((response) => {
+                    let res = response.data;
+                    this.cartList = res.result;
+                })
+            }
         }
     }
 </script>

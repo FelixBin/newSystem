@@ -6,7 +6,7 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 router.post('/login', function (req, res, next) {
-  var param = {
+    var param = {
         userName: req.body.userName,
         userPwd: req.body.userPwd,
     };
@@ -53,9 +53,10 @@ router.post('/logout', function (req, res, next) {
         result: ''
     })
 });
-//刷新保持
+
+//检查是否登录
 router.get('/checkLogin', function (req, res, next) {
-  if (req.cookies.userId) {
+    if (req.cookies.userId) {
         res.json({
             status: "0",
             msg: '',
@@ -68,5 +69,28 @@ router.get('/checkLogin', function (req, res, next) {
             result: ''
         })
     }
-})
+});
+
+//购物车列表
+router.get("/cartList", function (req, res, next) {
+    var userId = req.cookies.userId;
+
+    User.findOne({userId: userId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg: err.message,
+                result: ''
+            })
+        } else {
+            if (doc) {
+                res.json({
+                    status:'0',
+                    msg:'',
+                    result:doc.cartList
+                })
+            }
+        }
+    })
+});
 module.exports = router;
