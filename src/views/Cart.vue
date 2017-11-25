@@ -69,7 +69,7 @@
                                         </a>
                                     </div>
                                     <div class="cart-item-pic">
-                                        <img v-lazy="item.productImage" v-bind:alt="item.productName">
+                                        <img :src="item.productImage" v-bind:alt="item.productName">
                                     </div>
                                     <div class="cart-item-title">
                                         <div class="item-name">{{item.productName}}</div>
