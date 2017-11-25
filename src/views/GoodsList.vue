@@ -63,7 +63,6 @@
 <script>
     import '@/assets/css/base.css'
     import '@/assets/css/product.css'
-  /*  import  axios from 'axios'*/
     import qs from 'qs';
     import NavHeader from  '@/components/NavHeader.vue'
     import NavFooter from  '@/components/NavFooter.vue'
@@ -161,9 +160,7 @@
             addCart(productId){
               this.$axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId},{
                   withCredentials : true
-                }),{
-                  withCredentials : true
-                }).then((res) => {
+                })).then((res) => {
                     console.log(res)
                     if (res.data.status == 0) {
                         alert("成功")
