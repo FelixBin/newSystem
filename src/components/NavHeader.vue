@@ -35,6 +35,8 @@
                 </div>
             </div>
             <div style="clear: both"></div>
+
+
             <div class="md-modal modal-msg md-modal-transition " v-bind:class="{'md-show':loginModalFlag}">
                 <div class="md-modal-inner">
                     <div class="md-top">

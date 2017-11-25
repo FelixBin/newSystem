@@ -56,6 +56,34 @@
                 </div>
             </div>
         </div>
+        <!--没有登录提示框-->
+        <Modal v-bind:mdShow="mdShow" v-on:close="closeModal">
+            <p slot="message">
+                请先登录，否则无法加入购物车！
+            </p>
+            <div slot="btnGroup">
+                <a href="javascript:;" class="btn btn--m" @click="mdShow=false">关闭</a>
+            </div>
+        </Modal>
+        <!--登录后的提示框-->
+        <Modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
+            <p slot="message">
+                <svg class="icon-cart">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
+                </svg>
+                <span>加入购物车成功</span>
+            </p>
+            <div slot="btnGroup">
+                <a href="javascript:;" class="btn btn--m" @click="mdShowCart=false">
+                    继续购物
+                </a>
+                <router-link href="javascript:;" class="btn btn--m" to="/cart">
+                    查看购物车
+                </router-link>
+            </div>
+        </Modal>
+
+
         <nav-footer></nav-footer>
     </div>
 </template>
@@ -67,6 +95,7 @@
     import NavHeader from  '@/components/NavHeader.vue'
     import NavFooter from  '@/components/NavFooter.vue'
     import NavBread from  '@/components/NavBread.vue'
+    import Modal from  '@/components/Modal.vue'
     export default {
         name: 'temp',
         data () {
@@ -77,6 +106,8 @@
                 pageSize: 8,
                 busy: true,
                 priceChecked: 'all',
+                mdShow: false,
+                mdShowCart: false,
                 priceFilter: [
                     {
                         startPrice: '0.00',
@@ -101,7 +132,8 @@
         components: {
             NavHeader,
             NavFooter,
-            NavBread
+            NavBread,
+            Modal
         },
         mounted: function () {
             this.getGoodList()
@@ -115,11 +147,11 @@
                     priceLevel: this.priceChecked
                 };
                 this.loading = true;
-             this.$axios.get("http://localhost:27018/goods/list", {
+                this.$axios.get("http://localhost:27018/goods/list", {
                     params: param
-                },{
-                withCredentials : true
-             }).then((response) => {
+                }, {
+                    withCredentials: true
+                }).then((response) => {
                     this.loading = false;
                     let res = response.data;
                     if (res.status == "0") {
@@ -158,21 +190,28 @@
                 }, 500);
             },
             addCart(productId){
-              this.$axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId},{
-                  withCredentials : true
+                this.$axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId}, {
+                    withCredentials: true
                 })).then((res) => {
                     console.log(res)
                     if (res.data.status == 0) {
-                        alert("成功")
+                        this.mdShowCart=true;
                     } else {
-                        alert("失败")
+                        this.mdShow = true;
                     }
                 })
+            },
+            closeModal(){
+                this.mdShow = false;
+                this.mdShowCart=false;
             }
         }
     }
 </script>
-
 <style scoped>
+    .btn:hover {
+        background-color: #ee7a23;
+        transition: all .3s ease-out;
+    }
 
 </style>
