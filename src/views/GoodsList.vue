@@ -195,7 +195,7 @@
                 })).then((res) => {
                     console.log(res)
                     if (res.data.status == 0) {
-                        this.mdShowCart=true;
+                        this.mdShowCart = true;
                     } else {
                         this.mdShow = true;
                     }
@@ -203,7 +203,7 @@
             },
             closeModal(){
                 this.mdShow = false;
-                this.mdShowCart=false;
+                this.mdShowCart = false;
             }
         }
     }

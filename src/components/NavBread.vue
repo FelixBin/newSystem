@@ -4,7 +4,8 @@
             <div class="container">
                 <nav class="nav-breadcrumb">
                     <a href="/">Home</a>
-                   <slot name="bread"></slot>
+                    <slot name="bread"></slot>
+                    <slot name="myCart"></slot>
                 </nav>
             </div>
         </div>
@@ -22,7 +23,7 @@
     }
 </script>
 <style scoped>
-.nav-breadcrumb{
-    width: 12%;
-}
+    .nav-breadcrumb {
+        width: 12%;
+    }
 </style>
