@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
                                 <div class="cart-tab-2">
-                                    <div class="item-price">{{item.salePrice|currency('$')}}</div>
+                                    <div class="item-price">{{item.salePrice}}</div>
                                 </div>
                                 <div class="cart-tab-3">
                                     <div class="item-quantity">
@@ -96,7 +96,8 @@
                                 </div>
                                 <div class="cart-tab-5">
                                     <div class="cart-item-opration">
-                                        <a href="javascript:;" class="item-edit-btn" @click="delCartConfirm(item)">
+                                        <a href="javascript:;" class="item-edit-btn"
+                                           @click="delCartConfirm(item.productId)">
                                             <svg class="icon icon-del">
                                                 <use xlink:href="#icon-del"></use>
                                             </svg>
@@ -131,6 +132,14 @@
                 </div>
             </div>
         </div>
+
+        <Modal :mdShow="modalConfirm" @close="closeModal">
+            <p slot="message">你确认要删除此条数据吗？</p>
+            <div slot="btnGroup">
+                <a class="btn btn--m" href="javascript:;" @click="delCart">确认</a>
+                <a class="btn btn--m" href="javascript:;" @click="modalConfirm=false">关闭</a>
+            </div>
+        </Modal>
         <nav-footer></nav-footer>
     </div>
 </template>
@@ -166,10 +175,13 @@
     import NavFooter from '@/components/NavFooter'
     import NavBread from '@/components/NavBread'
     import Modal from '@/components/Modal'
+    import qs from 'qs';
     export default{
         data(){
             return {
-                cartList: []
+                cartList: [],
+                modalConfirm: false,
+                productId: '',//全局缓存变量
             }
         },
         mounted() {
@@ -187,6 +199,22 @@
                 this.$axios.get("http://localhost:27018/users/cartList",).then((response) => {
                     let res = response.data;
                     this.cartList = res.result;
+                })
+            },
+            delCartConfirm(productId){//删除某一商品，先弹出模态框
+                this.modalConfirm = true;
+                this.productId = productId;//全局缓存，而不需要每个传参
+            },
+            closeModal(){//关闭模态框
+                this.modalConfirm = false;
+            },
+            delCart(){//删除
+                this.$axios.post("http://localhost:27018/users/cartDel", qs.stringify({productId: this.productId})).then((response) => {
+                    let res = response.data;
+                    if (res.status == "0") {
+                        this.modalConfirm = false;
+                        this.init();
+                    }
                 })
             }
         }
