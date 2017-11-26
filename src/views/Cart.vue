@@ -117,8 +117,9 @@
                     <div class="cart-foot-inner">
                         <div class="cart-foot-l">
                             <div class="item-all-check">
-                                <a href="javascipt:;">
-                  <span class="checkbox-btn item-check-btn">
+                                <a href="javascipt:;" @click="toggleCheckAll">
+
+                  <span class="checkbox-btn item-check-btn" v-bind:class="{'check':checkAlFlag}">
                       <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                   </span>
                                     <span>Select all</span>
@@ -187,6 +188,7 @@
                 cartList: [],
                 modalConfirm: false,
                 productId: '',//全局缓存变量
+                checkAlFlag: false
             }
         },
         mounted() {
@@ -242,6 +244,21 @@
                 })).then((response) => {
                     let res = response.data;
 
+                })
+            },
+            //全选
+            toggleCheckAll(){
+                this.checkAlFlag = !this.checkAlFlag;//选中或不选中
+                this.cartList.forEach((item) => {
+                    item.checked = this.checkAlFlag;
+                });
+                this.$axios.post('http://localhost:27018/users/editCheckAll',qs.stringify({
+                    checkAll:this.checkAlFlag
+                })).then((response)=>{
+                    let res=response.data;
+                    if(res.status=="0"){
+                        console.log("success")
+                    }
                 })
             }
         }
