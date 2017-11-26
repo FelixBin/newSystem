@@ -128,12 +128,14 @@ router.post("/cartEdit", function (req, res, next) {
     var userId = req.cookies.userId;
     var productId = req.body.productId;
     var productNum = req.body.productNum;
+    var checked = req.body.checked;
     //改变子文档  update方法
     User.update({//查询
         "userId": userId,
         "cartList.productId": productId
     }, {//修改的目标
-        "cartList.$.productNum": productNum
+        "cartList.$.productNum": productNum,
+        "cartList.$.checked": checked,
     }, function (err, doc) {
         if (err) {
             res.json({

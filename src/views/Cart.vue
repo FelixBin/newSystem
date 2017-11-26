@@ -62,7 +62,8 @@
                             <li v-for="item in cartList">
                                 <div class="cart-tab-1">
                                     <div class="cart-item-check">
-                                        <a href="javascipt:;" class="checkbox-btn item-check-btn">
+                                        <a href="javascipt:;" class="checkbox-btn item-check-btn"
+                                           v-bind:class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
                                             <svg class="icon icon-ok">
                                                 <use xlink:href="#icon-ok"></use>
                                             </svg>
@@ -82,9 +83,13 @@
                                     <div class="item-quantity">
                                         <div class="select-self select-self-open">
                                             <div class="select-self-area">
-                                                <a class="input-sub" @click="editCart('minu',item)">-</a>
+
+                                                <a class="input-sub" @click="editCart('minus',item)">-</a>
+
                                                 <span class="select-ipt">{{item.productNum}}</span>
+
                                                 <a class="input-add" @click="editCart('add',item)">+</a>
+
                                             </div>
                                         </div>
                                     </div>
@@ -218,18 +223,22 @@
                 })
             },
             //增加/减少
-            editCart(flag,item){
+            editCart(flag, item){
                 if (flag == 'add') {
                     item.productNum++;
-                } else {
+                } else if (flag == 'minus') {
                     if (item.productNum <= 1) {
                         return;
+                    } else {
+                        item.productNum--;
                     }
-                    item.productNum--;
+                } else if (flag == 'checked') {
+                    item.checked = item.checked == '1' ? '0' : '1';
                 }
                 this.$axios.post("http://localhost:27018/users/cartEdit", qs.stringify({
                     productId: item.productId,
-                    productNum: item.productNum
+                    productNum: item.productNum,
+                    checked: item.checked
                 })).then((response) => {
                     let res = response.data;
 
