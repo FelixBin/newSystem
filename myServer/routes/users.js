@@ -122,5 +122,34 @@ router.post("/cartDel", function (req, res, next) {
                 }
             }
         })
+});
+//增加/减少  修改商品数量
+router.post("/cartEdit", function (req, res, next) {
+    var userId = req.cookies.userId;
+    var productId = req.body.productId;
+    var productNum = req.body.productNum;
+    //改变子文档  update方法
+    User.update({//查询
+        "userId": userId,
+        "cartList.productId": productId
+    }, {//修改的目标
+        "cartList.$.productNum": productNum
+    }, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg: err.message,
+                result: ''
+            })
+        } else {
+            if (doc) {
+                res.json({
+                    status: "0",
+                    msg: '',
+                    result: 'suc'
+                })
+            }
+        }
+    })
 })
 module.exports = router;
