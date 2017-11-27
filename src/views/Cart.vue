@@ -128,7 +128,7 @@
                         </div>
                         <div class="cart-foot-r">
                             <div class="item-total">
-                                Item total: <span class="total-price"></span>
+                                Item total: <span class="total-price">{{totalPrice}}</span>
                             </div>
                             <div class="btn-wrap">
                                 <a class="btn btn--red">Checkout</a>
@@ -195,7 +195,7 @@
         },
         computed: {
             checkAllFlag(){
-                return this.checkedCount ==this.cartList.length;
+                return this.checkedCount == this.cartList.length;
             },
             checkedCount(){//选中数量
                 var i = 0;
@@ -205,6 +205,15 @@
                     }
                 });
                 return i;
+            },
+            totalPrice(){
+                var money = 0;
+                this.cartList.forEach((item) => {
+                    if (item.checked == '1') {
+                        money += parseInt(item.salePrice) * parseInt(item.productNum)
+                    }
+                });
+                return money;
             }
         },
         components: {
