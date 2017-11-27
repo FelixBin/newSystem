@@ -5,14 +5,16 @@ import App from './App'
 import router from './router'
 import vueInfiniteScroll from  'vue-infinite-scroll'
 import axios from 'axios';
-axios.defaults.withCredentials=true;
+import {currency} from './util/currency'
+axios.defaults.withCredentials = true;
 Vue.prototype.$axios = axios;
-Vue.config.productionTip = false
-Vue.use(vueInfiniteScroll)
+Vue.config.productionTip = false;
+Vue.use(vueInfiniteScroll);
+Vue.filter("currency", currency);
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    router,
+    template: '<App/>',
+    components: {App}
 })
