@@ -119,7 +119,7 @@
                             <div class="item-all-check">
                                 <a href="javascipt:;" @click="toggleCheckAll">
 
-                  <span class="checkbox-btn item-check-btn" v-bind:class="{'check':checkAlFlag}">
+                  <span class="checkbox-btn item-check-btn" v-bind:class="{'check':checkAllFlag}">
                       <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                   </span>
                                     <span>Select all</span>
@@ -187,14 +187,26 @@
             return {
                 cartList: [],
                 modalConfirm: false,
-                productId: '',//全局缓存变量
-                checkAlFlag: false
+                productId: ''//全局缓存变量
             }
         },
         mounted() {
             this.init();
         },
-        computed: {},
+        computed: {
+            checkAllFlag(){
+                return this.checkedCount ==this.cartList.length;
+            },
+            checkedCount(){//选中数量
+                var i = 0;
+                this.cartList.forEach((item) => {
+                    if (item.checked == '1') {
+                        i++
+                    }
+                });
+                return i;
+            }
+        },
         components: {
             NavHeader,
             NavFooter,
@@ -248,15 +260,15 @@
             },
             //全选
             toggleCheckAll(){
-                this.checkAlFlag = !this.checkAlFlag;//选中或不选中
+                var flag = !this.checkAllFlag;
                 this.cartList.forEach((item) => {
-                    item.checked = this.checkAlFlag;
+                    item.checked = flag ? '1' : '0';
                 });
-                this.$axios.post('http://localhost:27018/users/editCheckAll',qs.stringify({
-                    checkAll:this.checkAlFlag
-                })).then((response)=>{
-                    let res=response.data;
-                    if(res.status=="0"){
+                this.$axios.post('http://localhost:27018/users/editCheckAll', qs.stringify({
+                    checkAll: flag
+                })).then((response) => {
+                    let res = response.data;
+                    if (res.status == "0") {
                         console.log("success")
                     }
                 })

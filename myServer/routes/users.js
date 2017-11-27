@@ -158,7 +158,7 @@ router.post("/cartEdit", function (req, res, next) {
 router.post("/editCheckAll", function (req, res, next) {
     var userId = req.body.userId;
     var checkAll = req.body.checkAll ? '1' : '0';
-    User.findOnd({userId: userId}, function (err, user) {
+    User.findOne({userId: userId}, function (err, user) {
         if (err) {
             res.json({
                 status: "1",
