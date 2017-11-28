@@ -6,6 +6,7 @@
                     <a href="/">Home</a>
                     <slot name="bread"></slot>
                     <slot name="myCart"></slot>
+                    <slot name="address"></slot>
                 </nav>
             </div>
         </div>

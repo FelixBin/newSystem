@@ -5,6 +5,7 @@
                 <div class="md-top">
                     <button class="md-close" @click="closeModal">Close</button>
                 </div>
+
                 <div class="md-content">
                     <div class="confirm-tips">
                         <slot name="message"></slot>
