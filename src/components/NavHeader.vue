@@ -94,8 +94,7 @@
         },
         methods: {
             checkLogin(){
-                this.$axios.get('http://localhost:27018/users/checkLogin',
-                    {
+                this.$axios.get('http://localhost:27017/users/checkLogin',{
                         withCredentials: true
                     }).then((response) => {
                     let res = response.data;
@@ -109,7 +108,7 @@
                     this.errorTip = true;
                     return false;
                 }
-                this.$axios.post('http://localhost:27018/users/login',
+                this.$axios.post('http://localhost:27017/users/login',
                     qs.stringify({
                             userName: this.userName,
                             userPwd: this.userPwd
@@ -130,7 +129,7 @@
                 })
             },
             logout(){
-                this.$axios.post("http://localhost:27018/users/logout", {
+                this.$axios.post("http://localhost:27017/users/logout", {
                 withCredentials : true
             }).then((response) => {
                     let res = response.data;

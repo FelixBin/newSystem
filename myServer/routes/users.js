@@ -5,6 +5,7 @@ var User = require("./../models/user");
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
+//登录
 router.post('/login', function (req, res, next) {
     var param = {
         userName: req.body.userName,
@@ -74,7 +75,6 @@ router.get('/checkLogin', function (req, res, next) {
 //购物车列表
 router.get("/cartList", function (req, res, next) {
     var userId = req.cookies.userId;
-
     User.findOne({userId: userId}, function (err, doc) {
         if (err) {
             res.json({
@@ -191,6 +191,25 @@ router.post("/editCheckAll", function (req, res, next) {
                     result: 'scu'
                 })
             }
+        }
+    })
+});
+//获取当前用户的地址列表
+router.get('/addressList', function (req, res, next) {
+    var userId = req.cookies.userId;
+    User.findOne({userId: userId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            res.json({
+                status: "0",
+                msg: '',
+                result: doc.addressList
+            })
         }
     })
 })

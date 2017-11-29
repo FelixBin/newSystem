@@ -230,7 +230,7 @@
     },
     methods: {
       init(){
-        this.$axios.get("http://localhost:27018/users/cartList",).then((response) => {
+        this.$axios.get("http://localhost:27017/users/cartList",).then((response) => {
           let res = response.data;
           this.cartList = res.result;
         })
@@ -243,7 +243,7 @@
         this.modalConfirm = false;
       },
       delCart(){//删除
-        this.$axios.post("http://localhost:27018/users/cartDel", qs.stringify({productId: this.productId})).then((response) => {
+        this.$axios.post("http://localhost:27017/users/cartDel", qs.stringify({productId: this.productId})).then((response) => {
           let res = response.data;
           if (res.status == "0") {
             this.modalConfirm = false;
@@ -264,7 +264,7 @@
         } else if (flag == 'checked') {
           item.checked = item.checked == '1' ? '0' : '1';
         }
-        this.$axios.post("http://localhost:27018/users/cartEdit", qs.stringify({
+        this.$axios.post("http://localhost:27017/users/cartEdit", qs.stringify({
           productId: item.productId,
           productNum: item.productNum,
           checked: item.checked
@@ -278,7 +278,7 @@
         this.cartList.forEach((item) => {
           item.checked = flag ? '1' : '0';
         });
-        this.$axios.post('http://localhost:27018/users/editCheckAll', qs.stringify({
+        this.$axios.post('http://localhost:27017/users/editCheckAll', qs.stringify({
           checkAll: flag
         })).then((response) => {
           let res = response.data;

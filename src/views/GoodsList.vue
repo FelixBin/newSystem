@@ -147,7 +147,7 @@
                     priceLevel: this.priceChecked
                 };
                 this.loading = true;
-                this.$axios.get("http://localhost:27018/goods/list", {
+                this.$axios.get("http://localhost:27017/goods/list", {
                     params: param
                 }, {
                     withCredentials: true
@@ -190,7 +190,7 @@
                 }, 500);
             },
             addCart(productId){
-                this.$axios.post("http://localhost:27018/goods/addCart", qs.stringify({productId: productId}, {
+                this.$axios.post("http://localhost:27017/goods/addCart", qs.stringify({productId: productId}, {
                     withCredentials: true
                 })).then((res) => {
                     console.log(res)
