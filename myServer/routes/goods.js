@@ -5,7 +5,7 @@ var Goods = require('../models/goods');
 var User = require('../models/user');
 
 //连接mongodb数据库
-mongoose.connect('mongodb://localhost:27018/newSystem', {useMongoClient: true});
+mongoose.connect('mongodb://localhost:27017/newSystem', {useMongoClient: true});
 mongoose.connection.on("connected", function () {
     console.log("链接成功")
     /* var goos=new Goods({
