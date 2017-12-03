@@ -72,7 +72,7 @@
                         <div class="addr-list">
                             <ul>
                                 <li v-for="(item,index) in addressListFilter" v-bind:class="{'check':checkIndex==index}"
-                                    @click="checkIndex=index">
+                                    @click="checkIndex=index;selectedAddressId=item.addressId">
                                     <dl>
                                         <dt>{{item.userName}}</dt>
                                         <dd class="address">{{item.streetName}}</dd>
@@ -135,7 +135,9 @@
                         </div>
                     </div>
                     <div class="next-btn-wrap">
-                        <router-link class="btn btn--m btn--red" to="/">Next</router-link>
+                        <router-link class="btn btn--m btn--red"
+                                     v-bind:to="{path:'orderConfirm',query:{'addressId':selectedAddressId}}">Next
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -166,7 +168,7 @@
             return {
                 limit: 3,
                 checkIndex: 0,
-                selectedAddrId: '',
+                selectedAddressId: '',
                 addressList: [],
                 isMdShow: false,
                 addressId: ''
