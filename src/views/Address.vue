@@ -86,9 +86,11 @@
                                         </a>
                                     </div>
                                     <div class="addr-opration addr-set-default">
-                                        <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
+                                        <a href="javascript:;" class="addr-set-default-btn" v-if="!item.isDefault"
+                                           @click="setDefault(item.addressId,index)"><i>Set
+                                            default</i></a>
                                     </div>
-                                    <div class="addr-opration addr-default">Default address</div>
+                                    <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
                                 </li>
                                 <li class="addr-new">
                                     <div class="add-new-inner">
@@ -148,6 +150,7 @@
     import NavBread from '@/components/NavBread'
     import Modal from '@/components/Modal'
     import {currency} from '@/util/currency'
+    import  qs from  'qs'
     export default{
         data(){
             return {
@@ -156,7 +159,8 @@
                 selectedAddrId: '',
                 addressList: [],
                 isMdShow: false,
-                addressId: ''
+                addressId: '',
+                index:0
             }
         },
         mounted(){
@@ -165,7 +169,7 @@
         computed: {
             addressListFilter: function () {
                 return this.addressList.slice(0, this.limit)
-            }
+            },
         },
         components: {
             NavHeader,
@@ -194,7 +198,17 @@
                 }
             },
             setDefault(addressId){
-
+                this.$axios.post('http://localhost:27017/users/setDefaultAddress', qs.stringify({
+                    addressId: addressId,
+                }), {
+                    withCredentials: true
+                }).then((response) => {
+                    let res = response.data;
+                    if (res.status == 0) {
+                        console.log("set Default address success");
+                        this.init();
+                    }
+                });
             },
             closeModal(){
 
