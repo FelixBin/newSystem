@@ -79,7 +79,8 @@
                                         <dd class="tel">{{item.tel}}</dd>
                                     </dl>
                                     <div class="addr-opration addr-del">
-                                        <a href="javascript:;" class="addr-del-btn">
+                                        <a href="javascript:;" class="addr-del-btn"
+                                           @click="delAddressConfirm(item.addressId)">
                                             <svg class="icon icon-del">
                                                 <use xlink:href="#icon-del"></use>
                                             </svg>
@@ -87,7 +88,7 @@
                                     </div>
                                     <div class="addr-opration addr-set-default">
                                         <a href="javascript:;" class="addr-set-default-btn" v-if="!item.isDefault"
-                                           @click="setDefault(item.addressId,index)"><i>Set
+                                           @click="setDefault(item.addressId)"><i>Set
                                             default</i></a>
                                     </div>
                                     <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
@@ -139,6 +140,15 @@
                 </div>
             </div>
         </div>
+        <modal :mdShow="isMdShow" @close="closeModal">
+            <p slot="message">
+                你是否确认取消此地址？
+            </p>
+            <div slot="btnGroup">
+                <a class="btn btn--m" href="javascript:;" @click="delAddress">确认</a>
+                <a class="btn btn--m" href="javascript:;" @click="isMdShow=false">取消</a>
+            </div>
+        </modal>
         <nav-footer></nav-footer>
     </div>
 </template>
@@ -159,8 +169,7 @@
                 selectedAddrId: '',
                 addressList: [],
                 isMdShow: false,
-                addressId: '',
-                index:0
+                addressId: ''
             }
         },
         mounted(){
@@ -211,13 +220,24 @@
                 });
             },
             closeModal(){
-
+                this.isMdShow = false;
             },
-            delAddressConfirm(addressId){
-
+            delAddressConfirm(addressId){//弹框并全局缓存addressId
+                this.isMdShow = true;
+                this.addressId = addressId
             },
             delAddress(){
-
+                this.$axios.post('http://localhost:27017/users/delAddress', qs.stringify({
+                    addressId: this.addressId
+                }), {
+                    withCredentials: true
+                }).then((response) => {
+                    let res = response.data;
+                    if (res.status == '0') {
+                        this.isMdShow = false;
+                        this.init();
+                    }
+                })
             }
         }
     }

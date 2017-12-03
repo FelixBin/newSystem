@@ -218,7 +218,7 @@ router.get('/addressList', function (req, res, next) {
 router.post('/setDefaultAddress', function (req, res, next) {
     var userId = req.cookies.userId;
     var addressId = req.body.addressId;
-    var index=req.body.index;
+    var index = req.body.index;
     if (!addressId) {
         res.json({
             status: '1003',
@@ -253,12 +253,40 @@ router.post('/setDefaultAddress', function (req, res, next) {
                         res.json({
                             status: '0',
                             msg: '',
-                            result:index
+                            result: index
                         })
                     }
                 })
             }
         })
     }
+});
+//删除地址
+router.post('/delAddress', function (req, res, next) {
+    var userId = req.cookies.userId;
+    var addressId = req.body.addressId;
+    User.update({
+        userId: userId
+    }, {
+        $pull: {//删除某个的某个（具体的）
+            'addressList': {
+                'addressId': addressId
+            }
+        }
+    }, function (err, doc) {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            })
+        } else {
+            res.json({
+                status: '0',
+                msg: '',
+                result: ''
+            })
+        }
+    })
 })
 module.exports = router;
