@@ -4,12 +4,19 @@ var userSchema = new mongoose.Schema({
     "userId": String,
     "userName": String,
     "userPwd": String,
-    "orderList": Array,
+    "orderList": [{
+        orderId: '',
+        orderTotal: '',
+        addressInfo: '',
+        goodsList: [],
+        orderStatus: '',
+        createDate: ''
+    }],
     "cartList": [
         {
-            "productId":String,
+            "productId": String,
             "producName": String,
-            "salePrice":Number,
+            "salePrice": Number,
             "productName": String,
             "productImage": String,
             "checked": String,
@@ -17,16 +24,15 @@ var userSchema = new mongoose.Schema({
         }
     ],
     "addressList": [
-      {
-        "addressId": String,
-        "userName": String,
-        "streetName": String,
-        "postCode": Number,
-        "tel": Number,
-        "isDefault": Boolean
-      }
+        {
+            "addressId": String,
+            "userName": String,
+            "streetName": String,
+            "postCode": Number,
+            "tel": Number,
+            "isDefault": Boolean
+        }
     ]
 });
-
 /*commonjs规范*/
 module.exports = mongoose.model("User", userSchema, 'users')

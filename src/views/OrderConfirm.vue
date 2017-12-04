@@ -128,10 +128,10 @@
 
                     <div class="order-foot-wrap">
                         <div class="prev-btn-wrap">
-                            <button class="btn btn--m">Previous</button>
+                            <router-link class="btn btn--m" to="/address">Previous</router-link>
                         </div>
                         <div class="next-btn-wrap">
-                            <button class="btn btn--m btn--red">Proceed to payment</button>
+                            <button class="btn btn--m btn--red" @click="payMent">Proceed to payment</button>
                         </div>
                     </div>
                 </div>
@@ -146,6 +146,7 @@
     import NavFooter from '@/components/NavFooter'
     import NavBread from '@/components/NavBread'
     import {currency} from '@/util/currency'
+    import qs from  'qs'
     export default {
         name: 'orderConfirm',
         data () {
@@ -182,6 +183,20 @@
                         }
                     });
                     this.orderTotal = this.subTotal + this.Shipping - this.disCount - this.tax;
+                })
+            },
+            payMent(){
+                var addressId = this.$route.query.addressId;
+                this.$axios.post('http://localhost:27017/users/payMent', qs.stringify({
+                    addressId: addressId,
+                    orderTotal: this.orderTotal
+                }), {
+                    withCredentials: true
+                }).then((response) => {
+                    let res = response.data;
+                    if (res.status == '0') {
+                        this.$router.push('/orderSuccess?orderId=' + res.result.orderId);
+                    }
                 })
             }
         }

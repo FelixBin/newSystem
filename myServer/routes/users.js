@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+require("./../util/util.js");
 var User = require("./../models/user");
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -285,6 +286,82 @@ router.post('/delAddress', function (req, res, next) {
                 status: '0',
                 msg: '',
                 result: ''
+            })
+        }
+    })
+});
+
+//订单生成
+router.post('/payMent', function (req, res, next) {
+    var userId = req.cookies.userId,
+        orderTotal = req.body.orderTotal,
+        addressId = req.body.addressId;
+    User.findOne({userId: userId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            })
+        } else {
+            var address = '';
+            var goodsList = [];
+            //获取当前用户的地址信息
+            doc.addressList.forEach((item) => {
+                if (addressId == item.addressId) {
+                    address = item;
+                }
+            });
+            //获取当前购物车的购买商品
+            doc.cartList.filter((item) => {
+                if (item.checked == "1") {
+                    goodsList.push(item);
+                }
+            });
+//时间+orderId
+            var platform = '622';//当前系统的自定义数子
+            var r1 = Math.floor(Math.random() * 10);
+            var r2 = Math.floor(Math.random() * 10);
+            var sysDate = new Date().Format('yyyyMMddhhmmss');
+            var createDate = new Date().Format('yyyy-MM-dd hh:mm:ss')
+            var orderId = platform + r1 + sysDate + r2;//21位数字
+
+            //订单对象
+            var order = {
+                orderId: orderId,
+                orderTotal: orderTotal,
+                addressInfo: address,
+                goodsList: goodsList,
+                orderStatus: '1',
+                createDate: createDate
+            };
+            doc.orderList.push(order);
+
+            doc.save(function (err1, doc1) {
+                if (err1) {
+                    res.json({
+                        status: '1',
+                        msg: err1.message,
+                        result: ''
+                    })
+                } else {
+                    res.json({
+                        status: '0',
+                        msg: '',
+                        result: {
+                            orderId: '',
+                            orderTotal: ''
+                        }
+                    })
+                }
+            });
+            res.json({
+                status: '0',
+                msg: '',
+                result: {
+                    orderId: order.orderId,
+                    orderTotal: order.orderTotal
+                }
             })
         }
     })
