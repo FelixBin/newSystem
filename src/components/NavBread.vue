@@ -7,6 +7,7 @@
                     <slot name="bread"></slot>
                     <slot name="myCart"></slot>
                     <slot name="address"></slot>
+                    <slot name="orderConfirm"></slot>
                 </nav>
             </div>
         </div>
