@@ -16,7 +16,7 @@ mongoose.connection.on("connected", function () {
      })
      goos.save();
      */
-    /* var user = new User({
+    /*var user = new User({
      "userId": "1007",
      "userName": '',
      "userPwd": '',

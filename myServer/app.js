@@ -35,6 +35,14 @@ app.all('*', function (req, res, next) {
         res.send(200);
     }
     else {
+        /*防止异步造成多次响应错误*/
+        var _send = res.send;
+        var sent = false;
+        res.send = function (data) {
+            if (sent) return;
+            _send.bind(res)(data);
+            sent = true;
+        };
         next();
     }
 });
