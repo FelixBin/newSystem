@@ -365,5 +365,53 @@ router.post('/payMent', function (req, res, next) {
             })
         }
     })
+});
+
+//根据用户id查询用户信息
+router.get('/orderDetail', function (req, res, next) {
+    var userId = req.cookies.userId,
+        orderId = req.query.orderId;
+    User.findOne({userId: userId}, function (err, userInfo) {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            })
+        } else {
+            var orderList = userInfo.orderList;
+            var orderTotal = 0;
+            if (orderList.length > 0) {
+                orderList.forEach((item) => {
+                    if (item.orderId = orderId) {
+                        orderTotal = item.orderTotal;
+                    }
+                });
+                if (orderTotal > 0) {
+                    res.json({
+                        status: '0',
+                        msg: '',
+                        result: {
+                            orderTotal: orderTotal,
+                            orderId: orderId
+                        }
+                    })
+                } else {
+                    res.json({
+                        status: '120002',
+                        msg: '当前用户没有创建订单',
+                        result: ''
+                    })
+                }
+
+            } else {
+                res.json({
+                    status: '120001',
+                    msg: '无订单',
+                    result: ''
+                })
+            }
+        }
+    })
 })
 module.exports = router;
