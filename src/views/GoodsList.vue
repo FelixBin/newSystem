@@ -193,9 +193,9 @@
                 this.$axios.post("http://localhost:27017/goods/addCart", qs.stringify({productId: productId}, {
                     withCredentials: true
                 })).then((res) => {
-                    console.log(res)
                     if (res.data.status == 0) {
                         this.mdShowCart = true;
+                        this.$store.commit('updateCartCount',1)
                     } else {
                         this.mdShow = true;
                     }

@@ -76,6 +76,7 @@
 <script>
     import './../assets/css/login.css'
     import  qs from 'qs'
+    import {mapState} from 'vuex'
     export default {
         name: 'temp',
         data () {
@@ -83,79 +84,81 @@
                 userName: '',
                 userPwd: '',
                 errorTip: false,
-                loginModalFlag: false,
+                loginModalFlag: false
             }
         },
         computed: {
-            nickName(){
-                return this.$store.state.nickName;
-            },
-            cartCount(){
-                return this.$store.state.cartCount;
-            }
-        },
-        mounted(){
-            this.checkLogin();
-        },
-        methods: {
-            checkLogin(){
-                this.$axios.get('http://localhost:27017/users/checkLogin', {
-                    withCredentials: true
-                }).then((response) => {
-                    let res = response.data;
-                    if (res.status == "0") {
-                        this.getCartCount();
-                        this.$store.commit("updateUserInfo", res.result);
-                    }
-                })
-            },
-            login(){
-                if (!this.userName || !this.userPwd) {
-                    this.errorTip = true;
-                    return false;
+            ...mapState(["nickName", "cartCount"])
+    /*   nickName(){
+     return this.$store.state.nickName;
+     },
+     cartCount(){
+     return this.$store.state.cartCount;
+     }*/
+    },
+    mounted()
+    {
+        this.checkLogin();
+    },
+    methods: {
+        checkLogin(){
+            this.$axios.get('http://localhost:27017/users/checkLogin', {
+                withCredentials: true
+            }).then((response) => {
+                let res = response.data;
+                if (res.status == "0") {
+                    this.getCartCount();
+                    this.$store.commit("updateUserInfo", res.result);
                 }
-                this.$axios.post('http://localhost:27017/users/login',
-                    qs.stringify({
-                            userName: this.userName,
-                            userPwd: this.userPwd
-                        }
-                    ),
-                    {
-                        withCredentials: true
-                    }
-                ).then((response) => {
-                    let res = response.data;
-                    if (res.status == "0") {
-                        this.errorTip = false;
-                        this.loginModalFlag = false;
-                        this.$store.commit("updateUserInfo", res.result.userName);
-                        this.getCartCount();
-                    } else {
-                        this.errorTip = true;
-                    }
-                })
-            },
-            logout(){
-                this.$axios.post("http://localhost:27017/users/logout", {
-                    withCredentials: true
-                }).then((response) => {
-                    let res = response.data;
-                    if (res.status == "0") {
-                        this.$store.commit("updateUserInfo", "");
-                    }
-                })
-            },
-            getCartCount(){
-                this.$axios.get("http://localhost:27017/users/getCartCount", {
-                    withCredentials: true
-                }).then((response) => {
-                    let res = response.data;
-                    if (res.status == '0') {
-                        this.$store.commit("initCartCount", res.result);
-                    }
-                })
+            })
+        },
+        login(){
+            if (!this.userName || !this.userPwd) {
+                this.errorTip = true;
+                return false;
             }
+            this.$axios.post('http://localhost:27017/users/login',
+                qs.stringify({
+                        userName: this.userName,
+                        userPwd: this.userPwd
+                    }
+                ),
+                {
+                    withCredentials: true
+                }
+            ).then((response) => {
+                let res = response.data;
+                if (res.status == "0") {
+                    this.errorTip = false;
+                    this.loginModalFlag = false;
+                    this.$store.commit("updateUserInfo", res.result.userName);
+                    this.getCartCount();
+                } else {
+                    this.errorTip = true;
+                }
+            })
+        },
+        logout(){
+            this.$axios.post("http://localhost:27017/users/logout", {
+                withCredentials: true
+            }).then((response) => {
+                let res = response.data;
+                if (res.status == "0") {
+                    this.$store.commit("updateUserInfo", "");
+                }
+            })
+        },
+        getCartCount(){
+            this.$axios.get("http://localhost:27017/users/getCartCount", {
+                withCredentials: true
+            }).then((response) => {
+                let res = response.data;
+                if (res.status == '0') {
+                    this.$store.commit("initCartCount", res.result);
+                }
+            })
         }
+    }
     }
 </script>
 <style scoped>

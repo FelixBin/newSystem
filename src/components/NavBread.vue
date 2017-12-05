@@ -19,7 +19,6 @@
         name: 'temp',
         data () {
             return {
-                //数据
             }
         }
     }

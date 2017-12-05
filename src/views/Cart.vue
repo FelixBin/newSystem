@@ -270,8 +270,6 @@
                     productNum: item.productNum,
                     checked: item.checked
                 })).then((response) => {
-
-                    let res = response.data;
                     let num = 0;
                     if (flag == 'add') {
                         num = 1;
