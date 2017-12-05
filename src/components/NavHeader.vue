@@ -86,7 +86,11 @@
                 userPwd: '',
                 errorTip: false,
                 loginModalFlag: false,
-                nickName: ''
+            }
+        },
+        computed: {
+            nickName(){
+                return this.$store.state.nickName;
             }
         },
         mounted(){
@@ -94,12 +98,12 @@
         },
         methods: {
             checkLogin(){
-                this.$axios.get('http://localhost:27017/users/checkLogin',{
-                        withCredentials: true
-                    }).then((response) => {
+                this.$axios.get('http://localhost:27017/users/checkLogin', {
+                    withCredentials: true
+                }).then((response) => {
                     let res = response.data;
                     if (res.status == "0") {
-                        this.nickName = res.result;
+                        this.$store.commit("updateUserInfo", res.result);
                     }
                 })
             },
@@ -122,7 +126,7 @@
                     if (res.status == "0") {
                         this.errorTip == false;
                         this.loginModalFlag = false;
-                        this.nickName = res.result.userName;
+                        this.$store.commit("updateUserInfo", res.result.userName);
                     } else {
                         this.errorTip = true;
                     }
@@ -130,11 +134,11 @@
             },
             logout(){
                 this.$axios.post("http://localhost:27017/users/logout", {
-                withCredentials : true
-            }).then((response) => {
+                    withCredentials: true
+                }).then((response) => {
                     let res = response.data;
                     if (res.status == "0") {
-                        this.nickName = ''
+                        this.$store.commit("updateUserInfo", "");
                     }
                 })
             }
