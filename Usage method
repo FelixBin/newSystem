@@ -1,6 +1,7 @@
-first  ------Restore database
+first  ------Restore database（还原数据库）
 you need search some methods to add a database in youself mongodb that the files(data) in newSystem/mongodbBackups.
-
+（注意）测试数据在 newSystem/mongodbBackups中，请自行在mongodb里面添加(还原)，然后，若在本地配置得有服务的话，请启动Mongodb服务，
+否则需要使用命令行转到安装mongodb的地方启动mongod.exe即可
 second  ------Server:
 npm install
 cd myserver 
@@ -9,6 +10,5 @@ node www
 server start ok
 
 second -----Client:
-npm install 
 npm run dev              
 
