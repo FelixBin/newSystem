@@ -82,8 +82,6 @@
                 </router-link>
             </div>
         </Modal>
-
-
         <nav-footer></nav-footer>
     </div>
 </template>

@@ -40,6 +40,12 @@ router.post('/login', function (req, res, next) {
                         userName: userDoc.userName
                     }
                 })
+            } else {
+                res.json({
+                    status: "1",
+                    msg: '账号或密码不存在',
+                    result: ''
+                })
             }
         }
     })

@@ -44,7 +44,6 @@ mongoose.connection.on("disconnected", function () {
 
 //查询商品列表
 router.get('/list', function (req, res, next) {
-    //配置运行跨域
 
     //limit :显示的数量
     // skip：忽略的数量
