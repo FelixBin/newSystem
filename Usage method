@@ -1,0 +1,14 @@
+first  ------Restore database
+you need search some methods to add a database in youself mongodb that the files(data) in newSystem/mongodbBackups.
+
+second  ------Server:
+npm install
+cd myserver 
+cd bin 
+node www
+server start ok
+
+second -----Client:
+npm install 
+npm run dev              
+
